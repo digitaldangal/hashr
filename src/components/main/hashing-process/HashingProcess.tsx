@@ -123,7 +123,13 @@ export default class HashingProcess extends React.Component<Props, State> {
                     <div>
                         <InputLabel>Hash</InputLabel>
                         <Input
-                            className={this.state.hashResult ? this.doComparison() ? styles.sameHashes : styles.differentHashes : ''}
+                            className={
+                                this.props.comparison && this.state.hashResult
+                                    ? this.doComparison()
+                                        ? styles.sameHashes
+                                        : styles.differentHashes
+                                    : ''
+                            }
                             disabled={this.state.hashResult ? false : true}
                             value={this.state.hashResult ? this.state.hashResult.hash : ''}
                         />
@@ -140,6 +146,13 @@ export default class HashingProcess extends React.Component<Props, State> {
         );
     }
 
+    /**
+     * Compares resulting hash to provided hash.
+     *
+     * @private
+     * @returns {boolean} true if equal, false otherwise
+     * @memberof HashingProcess
+     */
     private doComparison(): boolean {
         return this.props.comparison === this.state.hashResult.hash;
     }

@@ -9,7 +9,7 @@ import Main from './main/Main';
  * @param {React.DragEvent<any>} event
  * @returns {boolean}
  */
-function handleDrag(event: React.DragEvent<any>): boolean {
+function preventDragEvent(event: React.DragEvent<any>): boolean {
     event.preventDefault();
     return false;
 }
@@ -17,10 +17,11 @@ function handleDrag(event: React.DragEvent<any>): boolean {
 export default () => (
     <div
         className={styles.app}
-        onDragOver={handleDrag}
-        onDragLeave={handleDrag}
-        onDragEnd={handleDrag}
-        onDrop={handleDrag}
+        onDragEnd={preventDragEvent}
+        onDragLeave={preventDragEvent}
+        onDragOver={preventDragEvent}
+        onDragStart={preventDragEvent}
+        onDrop={preventDragEvent}
     >
         <Main />
     </div>

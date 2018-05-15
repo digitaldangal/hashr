@@ -1,4 +1,4 @@
-import { Button, Paper, Step, StepContent, StepLabel, Stepper, Typography } from '@material-ui/core';
+import { Button, Step, StepContent, StepLabel, Stepper } from '@material-ui/core';
 import * as React from 'react';
 
 import { File } from '../../models/CommonTypes';
@@ -18,6 +18,7 @@ type State = {
     chosenFile?: File;
     comparison?: string;
     isDragged: boolean;
+    isFinished: boolean;
 };
 
 /**
@@ -45,6 +46,7 @@ export default class Main extends React.Component<Props, State> {
             canContinue: false,
             chosenAlgorithm: HashingAlgorithm.SHA256,
             isDragged: false,
+            isFinished: false,
         };
         this.titles = [
             'Drag & Drop File',
@@ -55,6 +57,12 @@ export default class Main extends React.Component<Props, State> {
         this.changeStep = this.changeStep.bind(this);
         this.handleDrag = this.handleDrag.bind(this);
         this.handleDrop = this.handleDrop.bind(this);
+    }
+
+    componentDidMount(): void {
+        window.addEventListener('dragover', e => this.handleDrag(e, true), false);
+        window.addEventListener('dragleave', e => this.handleDrag(e, false), false);
+        window.addEventListener('drop', e => this.handleDrag(e, false), false);
     }
 
     /**
@@ -75,6 +83,7 @@ export default class Main extends React.Component<Props, State> {
 
         this.setState({
             activeStep: newStep,
+            isFinished: false,
         });
     }
 
@@ -88,14 +97,18 @@ export default class Main extends React.Component<Props, State> {
         const { activeStep } = this.state;
 
         return (
-            <div
-                onDragEnd={e => console.log('end')}
-                onDragEnter={e => this.handleDrag(e, true)}
-            >
+            <div>
                 <Stepper activeStep={activeStep} orientation="vertical">
                     {this.titles.map((label, index) => {
+                        const attributes = index + 1 === this.titles.length
+                            ? { completed: this.state.isFinished }
+                            : {};
+
                         return (
-                            <Step key={label}>
+                            <Step
+                                key={label}
+                                {...attributes}
+                            >
                                 <StepLabel>{label}</StepLabel>
                                 <StepContent
                                     className={this.state.isDragged ? styles.ondrag : styles.nodrag}
@@ -115,15 +128,17 @@ export default class Main extends React.Component<Props, State> {
                                             <Button
                                                 variant="raised"
                                                 color="primary"
-                                                onClick={e => this.changeStep(e, '+')}
+                                                onClick={e => !this.state.isFinished ? this.changeStep(e, '+') : this.changeStep(e)}
                                                 disabled={this.state.canContinue ? false : true}
                                             >
                                                 {
                                                     activeStep === this.titles.length - 2
                                                         ? 'Start'
-                                                        : activeStep === this.titles.length - 1
-                                                            ? 'Finish'
-                                                            : 'Next'
+                                                        : this.state.isFinished
+                                                            ? 'Reset'
+                                                            : activeStep === this.titles.length - 1
+                                                                ? 'Finish'
+                                                                : 'Next'
                                                 }
                                             </Button>
                                         </div>
@@ -133,20 +148,6 @@ export default class Main extends React.Component<Props, State> {
                         );
                     })}
                 </Stepper>
-                {activeStep === this.titles.length && (
-                    <Paper
-                        square={true}
-                        elevation={0}
-                        className={styles.endText}
-                    >
-                        <Typography>Hashing process terminated, you can go back to first step by clicking below button</Typography>
-                        <Button
-                            onClick={e => this.changeStep(e)}
-                        >
-                            Reset
-                        </Button>
-                    </Paper>
-                )}
             </div>
         );
     }
@@ -155,11 +156,11 @@ export default class Main extends React.Component<Props, State> {
      * Handles drag events.
      *
      * @private
-     * @param {React.DragEvent<any>} event the drag event
+     * @param {DragEvent} event the drag event
      * @param {boolean} isDragged true if is dragged, false otherwise
      * @memberof Main
      */
-    private handleDrag(event: React.DragEvent<any>, isDragged: boolean): void {
+    private handleDrag(event: DragEvent, isDragged: boolean): void {
         event.preventDefault();
         this.setState({ isDragged: isDragged });
     }
@@ -229,7 +230,7 @@ export default class Main extends React.Component<Props, State> {
                     <HashingProcess
                         file={this.state.chosenFile}
                         hashingAlgorithm={this.state.chosenAlgorithm}
-                        onProcess={processing => this.setState({ canContinue: !processing })}
+                        onProcess={processing => this.setState({ canContinue: !processing, isFinished: !processing })}
                         comparison={this.state.comparison}
                     />
                 );
