@@ -1,3 +1,9 @@
+.active-title>span>span {
+  animation: fade-and-scale 0.5s cubic-bezier(0.71, 0.55, 0.62, 1.57);
+  font-size: 1.1em;
+  font-weight: bold !important;
+}
+
 .end-text>p {
   margin-bottom: 20px;
 }
@@ -9,10 +15,30 @@
 }
 
 .nodrag>div {
-  border: none;
+  border: 1px dotted transparent;
   background-color: none;
+}
+
+.navigation-button {
+  height: 50px;
+  text-align: right;
 }
 
 .step-content {
   margin: 20px;
+}
+
+.step {
+  position: relative;
+}
+
+@keyframes fade-and-scale {
+  from {
+    opacity: 0;
+    transform: scale(.9, .9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1, 1);
+  }
 }

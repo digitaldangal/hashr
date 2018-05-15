@@ -1,4 +1,5 @@
 import { Button, Step, StepContent, StepLabel, Stepper } from '@material-ui/core';
+import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import * as React from 'react';
 
 import { File } from '../../models/CommonTypes';
@@ -51,7 +52,6 @@ export default class Main extends React.Component<Props, State> {
         this.titles = [
             'Drag & Drop File',
             'Select Hashing Algorithm',
-            'Confirm',
             'Process',
         ];
         this.changeStep = this.changeStep.bind(this);
@@ -107,9 +107,14 @@ export default class Main extends React.Component<Props, State> {
                         return (
                             <Step
                                 key={label}
+                                className={styles.step}
                                 {...attributes}
                             >
-                                <StepLabel>{label}</StepLabel>
+                                <StepLabel
+                                    className={index === this.state.activeStep ? styles.activeTitle : ''}
+                                >
+                                    {label}
+                                </StepLabel>
                                 <StepContent
                                     className={this.state.isDragged ? styles.ondrag : styles.nodrag}
                                     onDrop={this.handleDrop}
@@ -117,31 +122,18 @@ export default class Main extends React.Component<Props, State> {
                                     <div className={styles.stepContent}>
                                         {this.getStepContent(index)}
                                     </div>
-                                    <div>
-                                        <div>
-                                            <Button
-                                                disabled={activeStep === 0}
-                                                onClick={e => this.changeStep(e, '-')}
-                                            >
-                                                Back
-                                            </Button>
-                                            <Button
-                                                variant="raised"
-                                                color="primary"
-                                                onClick={e => !this.state.isFinished ? this.changeStep(e, '+') : this.changeStep(e)}
-                                                disabled={this.state.canContinue ? false : true}
-                                            >
-                                                {
-                                                    activeStep === this.titles.length - 2
-                                                        ? 'Start'
-                                                        : this.state.isFinished
-                                                            ? 'Reset'
-                                                            : activeStep === this.titles.length - 1
-                                                                ? 'Finish'
-                                                                : 'Next'
-                                                }
-                                            </Button>
-                                        </div>
+                                    <div
+                                        className={styles.navigationButton}
+                                    >
+                                        <Button
+                                            color="primary"
+                                            variant="fab"
+                                            mini={true}
+                                            onClick={e => !this.state.isFinished ? this.changeStep(e, '+') : this.changeStep(e)}
+                                            hidden={this.state.canContinue ? true : false}
+                                        >
+                                            <ArrowDownwardIcon />
+                                        </Button>
                                     </div>
                                 </StepContent>
                             </Step>
@@ -221,11 +213,6 @@ export default class Main extends React.Component<Props, State> {
                 );
                 break;
             case 2:
-                content = (
-                    <div>Proceed with hashing of file <strong>{this.state.chosenFile ? this.state.chosenFile.name : ''}</strong>?</div>
-                );
-                break;
-            case 3:
                 content = (
                     <HashingProcess
                         file={this.state.chosenFile}

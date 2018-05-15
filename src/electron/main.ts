@@ -10,8 +10,9 @@ let mainWindow: Electron.BrowserWindow;
 function createWindow() {
     mainWindow = new BrowserWindow({
         frame: true,
-        height: 725,
-        width: 850,
+        autoHideMenuBar: false,
+        height: 650,
+        width: 700,
         resizable: true,
         icon: path.join(__dirname, 'icon.png'),
     });
@@ -22,7 +23,7 @@ function createWindow() {
         slashes: true,
     }));
 
-    mainWindow.webContents.openDevTools();
+    if (process.env.NODE_ENV === 'development') mainWindow.webContents.openDevTools();
 
     mainWindow.on('closed', () => {
         mainWindow = null;
