@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "target": "es2017",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "outDir": "dist",
+    "noUnusedLocals": true
+  },
+  "include": [
+    "src/electron/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "src/electron/**/*.spec.ts"
+  ]
+}

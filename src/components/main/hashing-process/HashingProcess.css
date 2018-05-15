@@ -1,0 +1,17 @@
+.progress-bar {
+  margin-bottom: 10px;
+}
+
+.different-hashes>input {
+  color: red;
+}
+
+.same-hashes>input {
+  color: green;
+}
+
+.results div {
+  display: flex;
+  flex-flow: column;
+  align-items: stretch;
+}

@@ -1,0 +1,18 @@
+.end-text>p {
+  margin-bottom: 20px;
+}
+
+.ondrag>div {
+  box-sizing: border-box;
+  border: 1px dotted darkgray;
+  background-color: lightgray;
+}
+
+.nodrag>div {
+  border: none;
+  background-color: none;
+}
+
+.step-content {
+  margin: 20px;
+}

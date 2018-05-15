@@ -1,0 +1,14 @@
+.container {
+  display: flex;
+  flex-flow: column;
+}
+
+.field {
+  margin-bottom: 10px;
+}
+
+label {
+  font-size: 0.8em !important;
+  margin-top: 10px;
+  text-align: initial;
+}
