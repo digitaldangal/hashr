@@ -1,5 +1,6 @@
 import { Button, Step, StepContent, StepLabel, Stepper } from '@material-ui/core';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
+import RefreshIcon from '@material-ui/icons/Refresh';
 import * as React from 'react';
 
 import { File } from '../../models/CommonTypes';
@@ -59,32 +60,39 @@ export default class Main extends React.Component<Props, State> {
         this.handleDrop = this.handleDrop.bind(this);
     }
 
-    componentDidMount(): void {
+    /**
+     * ComponentDidMount lifecycle override.
+     *
+     * @memberof Main
+     */
+    public componentDidMount(): void {
         window.addEventListener('dragover', e => this.handleDrag(e, true), false);
         window.addEventListener('dragleave', e => this.handleDrag(e, false), false);
         window.addEventListener('drop', e => this.handleDrag(e, false), false);
+        window.addEventListener('keydown', e => this.handleKeydown(e), false);
     }
 
     /**
      * Changes the active step to given value or resets it if undefined.
      *
-     * @param {React.MouseEvent<HTMLElement>} event the mouse event
      * @param {('+' | '-')} [selector] + for next step or - for previous one
      * @memberof Main
      */
-    public changeStep(event: React.MouseEvent<HTMLElement>, selector?: '+' | '-'): void {
-        event.stopPropagation();
+    public changeStep(selector?: '+' | '-'): void {
+        if (this.state.canContinue) {
+            const newStep = selector === '+'
+                ? this.state.activeStep < this.titles.length - 1
+                    ? ++this.state.activeStep
+                    : 0
+                : this.state.activeStep === 0
+                    ? 0
+                    : --this.state.activeStep;
 
-        const newStep = selector
-            ? selector === '+'
-                ? ++this.state.activeStep
-                : --this.state.activeStep
-            : 0;
-
-        this.setState({
-            activeStep: newStep,
-            isFinished: false,
-        });
+            this.setState({
+                activeStep: newStep,
+                isFinished: false,
+            });
+        }
     }
 
     /**
@@ -98,7 +106,10 @@ export default class Main extends React.Component<Props, State> {
 
         return (
             <div>
-                <Stepper activeStep={activeStep} orientation="vertical">
+                <Stepper
+                    activeStep={activeStep}
+                    orientation="vertical"
+                >
                     {this.titles.map((label, index) => {
                         const attributes = index + 1 === this.titles.length
                             ? { completed: this.state.isFinished }
@@ -111,7 +122,7 @@ export default class Main extends React.Component<Props, State> {
                                 {...attributes}
                             >
                                 <StepLabel
-                                    className={index === this.state.activeStep ? styles.activeTitle : ''}
+                                    className={index === activeStep ? styles.activeTitle : ''}
                                 >
                                     {label}
                                 </StepLabel>
@@ -126,13 +137,18 @@ export default class Main extends React.Component<Props, State> {
                                         className={styles.navigationButton}
                                     >
                                         <Button
+                                            disabled={!this.state.canContinue ? true : false}
+                                            className={this.state.canContinue ? styles.pulse : styles.faded}
                                             color="primary"
                                             variant="fab"
                                             mini={true}
-                                            onClick={e => !this.state.isFinished ? this.changeStep(e, '+') : this.changeStep(e)}
-                                            hidden={this.state.canContinue ? true : false}
+                                            onClick={e => this.changeStep('+')}
                                         >
-                                            <ArrowDownwardIcon />
+                                            {
+                                                activeStep + 1 !== this.titles.length
+                                                    ? <ArrowDownwardIcon />
+                                                    : <RefreshIcon />
+                                            }
                                         </Button>
                                     </div>
                                 </StepContent>
@@ -155,6 +171,31 @@ export default class Main extends React.Component<Props, State> {
     private handleDrag(event: DragEvent, isDragged: boolean): void {
         event.preventDefault();
         this.setState({ isDragged: isDragged });
+    }
+
+    /**
+     * Handles keyboard events.
+     *
+     * @private
+     * @param {KeyboardEvent} event the keydown event
+     * @memberof Main
+     */
+    private handleKeydown(event: KeyboardEvent): void {
+        switch (event.key) {
+            case 'ArrowDown':
+                this.changeStep('+');
+                break;
+            case 'ArrowUp':
+                this.changeStep('-');
+                break;
+            case 'Backspace':
+                this.changeStep('-');
+                break;
+            case 'Enter':
+                this.changeStep('+');
+                break;
+            default:
+        }
     }
 
     /**

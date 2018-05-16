@@ -1,3 +1,5 @@
+import '../themes/Variables.css';
+
 import * as React from 'react';
 
 import * as styles from './App.css';

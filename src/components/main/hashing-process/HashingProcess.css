@@ -3,11 +3,11 @@
 }
 
 .different-hashes>input {
-  color: red;
+  color: var(--md-primary-red);
 }
 
 .same-hashes>input {
-  color: green;
+  color: var(--md-primary-green);
 }
 
 .results div {

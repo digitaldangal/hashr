@@ -6,3 +6,5 @@ export const nodrag: string;
 export const navigationButton: string;
 export const stepContent: string;
 export const step: string;
+export const faded: string;
+export const pulse: string;
