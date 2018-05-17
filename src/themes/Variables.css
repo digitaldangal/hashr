@@ -14,6 +14,7 @@
   --md-primary-teal: #009688;
   --md-primary-yellow: #FFEB3B;
   --md-primary-white: #FAFAFA;
+  --md-primary-white-rgba: 250, 250, 250;
   --md-secondary-blue: #0D47A1;
   --md-secondary-brown: #3E2723;
   --md-secondary-green: #1B5E20;
@@ -26,4 +27,5 @@
   --md-secondary-teal: #004D40;
   --md-secondary-white: #424242;
   --md-secondary-yellow: #F57F17;
+  --animation-cubic-bezier: cubic-bezier(0.4, 0, 0.2, 1);
 }

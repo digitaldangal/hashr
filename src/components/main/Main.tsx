@@ -35,6 +35,8 @@ export default class Main extends React.Component<Props, State> {
     public state: State;
     public titles: string[];
 
+    private interval: NodeJS.Timer;
+
     /**
      * Creates an instance of Main.
      *
@@ -67,8 +69,8 @@ export default class Main extends React.Component<Props, State> {
      */
     public componentDidMount(): void {
         window.addEventListener('dragover', e => this.handleDrag(e, true), false);
-        window.addEventListener('dragleave', e => this.handleDrag(e, false), false);
         window.addEventListener('drop', e => this.handleDrag(e, false), false);
+        window.addEventListener('dragleave', e => this.handleDrag(e, false), false);
         window.addEventListener('keydown', e => this.handleKeydown(e), false);
     }
 
@@ -122,7 +124,7 @@ export default class Main extends React.Component<Props, State> {
                                 {...attributes}
                             >
                                 <StepLabel
-                                    className={index === activeStep ? styles.activeTitle : ''}
+                                    className={`${styles.stepTitle} ${index === activeStep ? styles.activeTitle : ''}`}
                                 >
                                     {label}
                                 </StepLabel>
@@ -138,7 +140,7 @@ export default class Main extends React.Component<Props, State> {
                                     >
                                         <Button
                                             disabled={!this.state.canContinue ? true : false}
-                                            className={this.state.canContinue ? styles.pulse : styles.faded}
+                                            className={this.state.canContinue && !this.state.isDragged ? styles.pulse : styles.faded}
                                             color="primary"
                                             variant="fab"
                                             mini={true}
@@ -164,13 +166,20 @@ export default class Main extends React.Component<Props, State> {
      * Handles drag events.
      *
      * @private
-     * @param {DragEvent} event the drag event
+     * @param {(Event | React.SyntheticEvent<any>)} event the drag event
      * @param {boolean} isDragged true if is dragged, false otherwise
      * @memberof Main
      */
-    private handleDrag(event: DragEvent, isDragged: boolean): void {
+    private handleDrag(event: Event | React.SyntheticEvent<any>, isDragged: boolean): void {
         event.preventDefault();
-        this.setState({ isDragged: isDragged });
+
+        clearInterval(this.interval);
+        if (!isDragged) {
+            this.interval = setInterval(() => this.setState({ isDragged: isDragged }), 50);
+
+        } else {
+            this.setState({ isDragged: isDragged });
+        }
     }
 
     /**

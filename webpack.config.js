@@ -1,10 +1,11 @@
 const CopyPlugin = require('copy-webpack-plugin');
 const HtmlPlugin = require('html-webpack-plugin');
 const InterpolateHtmlPlugin = require('interpolate-html-plugin');
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const webpack = require('webpack');
-const merge = require("webpack-merge")
+const merge = require('webpack-merge')
+const fs = require('fs');
 
 const baseConfig = require('./webpack.config.base');
 
@@ -17,8 +18,8 @@ module.exports = (env, options) => {
             contentBase: baseConfig.paths.dist,
             compress: true,
             historyApiFallback: true,
-            open: true,
-            port: 3000,
+            open: false,
+            port: 9999,
         },
         target: 'electron-main',
         output: {
@@ -87,8 +88,8 @@ module.exports = (env, options) => {
                 PUBLIC_URL: '',
             }),
             new MiniCssExtractPlugin({
-                filename: "[name].bundle.css",
-                chunkFilename: "[id].css",
+                filename: '[name].bundle.css',
+                chunkFilename: '[id].css',
             })
         ],
     };
@@ -99,5 +100,5 @@ module.exports = (env, options) => {
         );
     }
 
-    return merge.smart(baseConfig.getConfig(env, options), configuration);
+    return merge(baseConfig.getConfig(env, options), configuration);
 }

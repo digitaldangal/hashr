@@ -27,12 +27,12 @@
     "build:electron": "tsc --project tsconfig.electron.json",
     "build:electron-dev": "tsc --project tsconfig.electron.json --watch",
     "build:prod": "concurrently 'npm run build:web-prod' 'npm run build:electron'",
-    "build:web": "webpack --config webpack.config.client.js --mode development --progress",
-    "build:web-dev": "npm run build:web -- --watch",
-    "build:web-prod": "npm run build:web -- --mode production --progress false",
+    "build:web": "webpack --mode development --progress",
+    "build:web-dev": "webpack --mode development --watch",
+    "build:web-prod": "webpack --mode production",
     "start": "electron .",
     "start:dev": "ELECTRON_START_URL=http://localhost:3000 electron .",
-    "start:web": "webpack-dev-server --config webpack.config.client.js --mode development --hot --inline"
+    "start:web": "webpack-dev-server --mode development --hot --inline"
   },
   "dependencies": {
     "@material-ui/core": "1.0.0-rc.1",

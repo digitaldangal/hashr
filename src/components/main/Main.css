@@ -4,18 +4,22 @@
   font-weight: bold !important;
 }
 
+/* .step-title {
+  pointer-events: none;
+} */
+
 .end-text>p {
   margin-bottom: 20px;
 }
 
 .ondrag>div {
-  box-sizing: border-box;
-  border: 1px dotted darkgray;
-  background-color: lightgray;
+  background-color: var(--md-primary-grey);
+  outline: 2px dashed var(--md-primary-blue);
+  transition: background-color 250ms var(--animation-cubic-bezier);
+  pointer-events: all;
 }
 
 .nodrag>div {
-  border: 1px dotted transparent;
   background-color: none;
 }
 
@@ -34,15 +38,23 @@
   position: relative;
 }
 
+.step div {
+  pointer-events: none;
+}
+
+.no-pointer-events {
+  pointer-events: none;
+}
+
 .faded {
   opacity: 0;
 }
 
 .pulse {
   opacity: 1;
-  box-shadow: 0 0 0 rgba(0, 40, 100, 0.5);
-  animation: pulse 2s infinite;
-  transition: opacity 750ms cubic-bezier(0.4, 0, 0.2, 1), background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms !important;
+  box-shadow: 0 0 0 rgba(var(--md-primary-white-rgba), 0.5);
+  animation: pulse 1.5s infinite;
+  transition: opacity 750ms var(--animation-cubic-bezier), background-color 250ms var(--animation-cubic-bezier) 0ms, box-shadow 250ms var(--animation-cubic-bezier) 0ms !important;
 }
 
 @keyframes fade-and-scale {
@@ -58,12 +70,12 @@
 
 @keyframes pulse {
   0% {
-    box-shadow: 0 0 0 0 rgba(0, 40, 100, 0.5);
+    box-shadow: 0 0 0 0 rgba(var(--md-primary-white-rgba), 0.5);
   }
   70% {
-    box-shadow: 0 0 0 10px rgba(0, 40, 100, 0);
+    box-shadow: 0 0 0 10px rgba(var(--md-primary-white-rgba), 0);
   }
   100% {
-    box-shadow: 0 0 0 0 rgba(0, 40, 100, 0);
+    box-shadow: 0 0 0 0 rgba(var(--md-primary-white-rgba), 0);
   }
 }
