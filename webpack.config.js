@@ -55,6 +55,10 @@ module.exports = (env, options) => {
         performance: {
             hints: false,
         },
+        stats: {
+            children: false,
+            modules: false,
+        },
         module: {
             rules: [
                 {
@@ -143,6 +147,7 @@ module.exports = (env, options) => {
             new MiniCssExtractPlugin({
                 filename: '[name].ui.css',
                 chunkFilename: '[id].css',
+                verbose: false,
             }),
             new webpack.BannerPlugin(
                 { banner: fs.readFileSync('COPYRIGHT', 'utf8').trim() }

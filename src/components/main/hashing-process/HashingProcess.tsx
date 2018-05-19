@@ -62,7 +62,15 @@ export default class HashingProcess extends React.Component<Props, State> {
             .then(res => {
                 this.setState({ hashResult: res });
                 this.props.onProcess(false);
-                EventService.emit(Events.SHOW_MESSAGE, 'Success!', { type: Toasts.SUCCESS, duration: 2500 });
+
+                if (this.props.comparison) {
+                    this.props.comparison === this.state.hashResult.hash
+                        ? EventService.emit(Events.SHOW_MESSAGE, 'Hashes are equal!', { type: Toasts.SUCCESS, duration: 2500 })
+                        : EventService.emit(Events.SHOW_MESSAGE, 'Hashes are different!', { type: Toasts.WARN, duration: 2500 });
+
+                } else {
+                    EventService.emit(Events.SHOW_MESSAGE, 'Success!', { type: Toasts.SUCCESS, duration: 2500 });
+                }
             })
             .catch(err => {
                 this.setState({ isError: true });
