@@ -25,6 +25,7 @@
   "scripts": {
     "build": "concurrently 'webpack --mode production' 'tsc -p tsconfig.electron.json'",
     "build:dev": "concurrently 'webpack --mode development --watch' 'tsc -p tsconfig.electron.json --watch'",
+    "package": "build",
     "start": "electron ."
   },
   "dependencies": {
@@ -49,6 +50,7 @@
     "copy-webpack-plugin": "4.5.1",
     "css-loader": "0.28.11",
     "electron": "2.0.1",
+    "electron-builder": "20.13.4",
     "file-loader": "1.1.11",
     "html-loader": "0.5.5",
     "html-webpack-plugin": "3.2.0",
@@ -67,5 +69,39 @@
   },
   "publishConfig": {
     "access": "public"
+  },
+  "build": {
+    "appId": "com.kobionic.hashr",
+    "extends": null,
+    "asar": true,
+    "files": [
+      {
+        "from": "dist",
+        "to": "build"
+      }
+    ],
+    "mac": {
+      "category": "public.app-category.graphics-design"
+    },
+    "nsis": {
+      "createDesktopShortcut": "always"
+    },
+    "dmg": {
+      "contents": [
+        {
+          "x": 110,
+          "y": 150
+        },
+        {
+          "x": 240,
+          "y": 150,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ]
+    },
+    "linux": {
+      "category": "Graphics"
+    }
   }
 }
