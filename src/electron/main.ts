@@ -18,6 +18,7 @@ function createWindow() {
         icon: path.join(__dirname, 'icon.png'),
         maximizable: false,
         resizable: false,
+        transparent: false,
         width: WINDOW_WIDTH,
         x: x,
         y: y,

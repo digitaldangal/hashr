@@ -1,5 +1,5 @@
 .message-container {
-  margin-left: -16px;
+  margin-left: -15px;
   margin-bottom: 1px;
 }
 
@@ -14,7 +14,7 @@
 }
 
 .messager-info {
-  background-color: var(--md-primary-blue);
+  background-color: var(--md-secondary-blue);
 }
 
 .messager-error {

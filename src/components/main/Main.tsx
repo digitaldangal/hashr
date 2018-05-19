@@ -35,8 +35,6 @@ export default class Main extends React.Component<Props, State> {
     public state: State;
     public titles: string[];
 
-    private interval: number;
-
     /**
      * Creates an instance of Main.
      *
@@ -68,33 +66,10 @@ export default class Main extends React.Component<Props, State> {
      * @memberof Main
      */
     public componentDidMount(): void {
-        window.addEventListener('dragover', e => this.handleDrag(e, true), false);
         window.addEventListener('drop', e => this.handleDrag(e, false), false);
-        window.addEventListener('dragleave', e => this.handleDrag(e, false), false);
+        window.addEventListener('dragenter', e => this.handleDrag(e, true), false);
+        window.addEventListener('dragleave', e => { if (!e.clientX && !e.clientY) this.handleDrag(e, false); }, false);
         window.addEventListener('keydown', e => this.handleKeydown(e), false);
-    }
-
-    /**
-     * Changes the active step to given value or resets it if undefined.
-     *
-     * @param {('+' | '-')} [selector] + for next step or - for previous one
-     * @memberof Main
-     */
-    public changeStep(selector?: '+' | '-'): void {
-        if (this.state.canContinue) {
-            const newStep = selector === '+'
-                ? this.state.activeStep < this.titles.length - 1
-                    ? ++this.state.activeStep
-                    : 0
-                : this.state.activeStep === 0
-                    ? 0
-                    : --this.state.activeStep;
-
-            this.setState({
-                activeStep: newStep,
-                isFinished: false,
-            });
-        }
     }
 
     /**
@@ -128,14 +103,13 @@ export default class Main extends React.Component<Props, State> {
                                 >
                                     {label}
                                 </StepLabel>
-                                <StepContent
-                                    onDrop={this.handleDrop}
-                                >
+                                <StepContent>
                                     <div className={styles.stepContent}>
                                         {this.getStepContent(index)}
                                         {index === 0 &&
                                             <div
                                                 className={`${styles.dropzone} ${this.state.isDragged ? styles.ondrag : ''}`}
+                                                onDrop={this.handleDrop}
                                             >
                                                 <GetAppIcon nativeColor="white" className={styles.dropzoneIcon} />
                                             </div>
@@ -169,48 +143,40 @@ export default class Main extends React.Component<Props, State> {
     }
 
     /**
-     * Handles drag events.
+     * Changes the active step to given value or resets it if undefined.
      *
      * @private
-     * @param {(Event | React.SyntheticEvent<any>)} event the drag event
-     * @param {boolean} isDragged true if is dragged, false otherwise
+     * @param {('+' | '-')} [selector] + for next step or - for previous one
      * @memberof Main
      */
-    private handleDrag(event: Event | React.SyntheticEvent<any>, isDragged: boolean): void {
-        event.preventDefault();
+    private changeStep(selector?: '+' | '-'): void {
+        if (this.state.canContinue) {
+            const newStep = selector === '+'
+                ? this.state.activeStep < this.titles.length - 1
+                    ? ++this.state.activeStep
+                    : 0
+                : this.state.activeStep === 0
+                    ? 0
+                    : --this.state.activeStep;
 
-        clearInterval(this.interval);
-        if (!isDragged) {
-            this.interval = window.setInterval(() => this.setState({ isDragged: isDragged }), 50);
-
-        } else {
-            this.setState({ isDragged: isDragged });
+            this.setState({
+                activeStep: newStep,
+                isFinished: false,
+            });
         }
     }
 
     /**
-     * Handles keyboard events.
+     * Handles drag events.
      *
      * @private
-     * @param {KeyboardEvent} event the keydown event
+     * @param {Event} event the drag event
+     * @param {boolean} isDragged true if is dragged, false otherwise
      * @memberof Main
      */
-    private handleKeydown(event: KeyboardEvent): void {
-        switch (event.key) {
-            case 'ArrowDown':
-                this.changeStep('+');
-                break;
-            case 'ArrowUp':
-                this.changeStep('-');
-                break;
-            case 'Backspace':
-                this.changeStep('-');
-                break;
-            case 'Enter':
-                this.changeStep('+');
-                break;
-            default:
-        }
+    private handleDrag(event: Event, isDragged: boolean): void {
+        event.preventDefault();
+        this.setState({ isDragged: isDragged });
     }
 
     /**
@@ -236,6 +202,31 @@ export default class Main extends React.Component<Props, State> {
                 canContinue: true,
                 chosenFile: file,
             });
+        }
+    }
+
+    /**
+     * Handles keyboard events.
+     *
+     * @private
+     * @param {KeyboardEvent} event the keydown event
+     * @memberof Main
+     */
+    private handleKeydown(event: KeyboardEvent): void {
+        switch (event.key) {
+            case 'ArrowDown':
+                this.changeStep('+');
+                break;
+            case 'ArrowUp':
+                this.changeStep('-');
+                break;
+            case 'Backspace':
+                this.changeStep('-');
+                break;
+            case 'Enter':
+                this.changeStep('+');
+                break;
+            default:
         }
     }
 
