@@ -69,7 +69,7 @@ export default class HashingProcess extends React.Component<Props, State> {
                         : EventService.emit(Events.SHOW_MESSAGE, 'Hashes are different!', { type: Toasts.WARN, duration: 2500 });
 
                 } else {
-                    EventService.emit(Events.SHOW_MESSAGE, 'Success!', { type: Toasts.SUCCESS, duration: 2500 });
+                    EventService.emit(Events.SHOW_MESSAGE, 'Hash generated!', { type: Toasts.INFO, duration: 2500 });
                 }
             })
             .catch(err => {
