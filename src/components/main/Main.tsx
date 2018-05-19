@@ -1,10 +1,10 @@
 import { Button, Step, StepContent, StepLabel, Stepper } from '@material-ui/core';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
+import GetAppIcon from '@material-ui/icons/GetApp';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import * as React from 'react';
 
-import { File } from '../../models/CommonTypes';
-import { HashingAlgorithm } from '../../models/HashingTypes';
+import { CommonTypes, HashingTypes } from '../../models';
 import AlgorithmChooser from './algorithm-chooser/AlgorithmChooser';
 import FileChooser from './file-chooser/FileChooser';
 import HashingProcess from './hashing-process/HashingProcess';
@@ -16,8 +16,8 @@ type Props = {
 type State = {
     activeStep: number;
     canContinue: boolean;
-    chosenAlgorithm: string,
-    chosenFile?: File;
+    chosenAlgorithm: string;
+    chosenFile?: CommonTypes.File;
     comparison?: string;
     isDragged: boolean;
     isFinished: boolean;
@@ -35,7 +35,7 @@ export default class Main extends React.Component<Props, State> {
     public state: State;
     public titles: string[];
 
-    private interval: NodeJS.Timer;
+    private interval: number;
 
     /**
      * Creates an instance of Main.
@@ -48,7 +48,7 @@ export default class Main extends React.Component<Props, State> {
         this.state = {
             activeStep: 0,
             canContinue: false,
-            chosenAlgorithm: HashingAlgorithm.SHA256,
+            chosenAlgorithm: HashingTypes.Algorithm.SHA256,
             isDragged: false,
             isFinished: false,
         };
@@ -120,20 +120,26 @@ export default class Main extends React.Component<Props, State> {
                         return (
                             <Step
                                 key={label}
-                                className={styles.step}
+                                className={`${styles.step} ${this.state.isDragged ? styles.noPointerEvents : ''}`}
                                 {...attributes}
                             >
                                 <StepLabel
-                                    className={`${styles.stepTitle} ${index === activeStep ? styles.activeTitle : ''}`}
+                                    className={index === activeStep ? styles.activeTitle : ''}
                                 >
                                     {label}
                                 </StepLabel>
                                 <StepContent
-                                    className={this.state.isDragged ? styles.ondrag : styles.nodrag}
                                     onDrop={this.handleDrop}
                                 >
                                     <div className={styles.stepContent}>
                                         {this.getStepContent(index)}
+                                        {index === 0 &&
+                                            <div
+                                                className={`${styles.dropzone} ${this.state.isDragged ? styles.ondrag : ''}`}
+                                            >
+                                                <GetAppIcon nativeColor="white" className={styles.dropzoneIcon} />
+                                            </div>
+                                        }
                                     </div>
                                     <div
                                         className={styles.navigationButton}
@@ -141,7 +147,7 @@ export default class Main extends React.Component<Props, State> {
                                         <Button
                                             disabled={!this.state.canContinue ? true : false}
                                             className={this.state.canContinue && !this.state.isDragged ? styles.pulse : styles.faded}
-                                            color="primary"
+                                            color="secondary"
                                             variant="fab"
                                             mini={true}
                                             onClick={e => this.changeStep('+')}
@@ -175,7 +181,7 @@ export default class Main extends React.Component<Props, State> {
 
         clearInterval(this.interval);
         if (!isDragged) {
-            this.interval = setInterval(() => this.setState({ isDragged: isDragged }), 50);
+            this.interval = window.setInterval(() => this.setState({ isDragged: isDragged }), 50);
 
         } else {
             this.setState({ isDragged: isDragged });

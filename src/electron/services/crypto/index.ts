@@ -6,9 +6,8 @@ import * as ms from 'ms';
 import * as path from 'path';
 import { promisify } from 'util';
 
-import Events from '../../models/Events';
-import { HashingAlgorithm, HashResult } from '../../models/HashingTypes';
-import EventService from '../../services/EventService';
+import { Events, HashingTypes } from '../../../models';
+import { EventService } from '../../../services';
 
 const stat = promisify(fs.stat);
 
@@ -52,8 +51,8 @@ export default class CryptoService {
      * @returns {Promise<HashResult>} HashResult object resulting from the message digest
      * @memberof CryptoService
      */
-    public async hashFile(filepath: string, algorithm?: string, comparison?: string): Promise<HashResult> {
-        return new Promise<HashResult>(async (resolve, reject) => {
+    public async hashFile(filepath: string, algorithm?: string, comparison?: string): Promise<HashingTypes.Result> {
+        return new Promise<HashingTypes.Result>(async (resolve, reject) => {
             try {
                 const size = (await stat(filepath)).size;
 
@@ -61,7 +60,7 @@ export default class CryptoService {
 
                 // Set hashing algorithm if in enum, else use default one
                 // @ts-ignore
-                const alg = Object.keys(HashingAlgorithm).includes(algorithm) ? algorithm : HashingAlgorithm.SHA256;
+                const alg = Object.keys(HashingTypes.Algorithm).includes(algorithm) ? algorithm : HashingTypes.Algorithm.SHA256;
                 // Create hashing engine from the algorithm, forced to lowercase for better recognition
                 const hasher = crypto.createHash(alg.toLowerCase());
 

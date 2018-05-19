@@ -2,22 +2,20 @@ import { Input, InputLabel, LinearProgress } from '@material-ui/core';
 import * as bytes from 'bytes';
 import * as React from 'react';
 
-import CryptoService from '../../../electron/services/CryptoService';
-import { File } from '../../../models/CommonTypes';
-import Events from '../../../models/Events';
-import { HashResult } from '../../../models/HashingTypes';
-import EventService from '../../../services/EventService';
+import { CryptoService } from '../../../electron/services';
+import { CommonTypes, Events, HashingTypes, Toasts } from '../../../models';
+import { EventService } from '../../../services';
 import * as styles from './HashingProcess.css';
 
 type Props = {
     comparison?: string;
-    file: File;
+    file: CommonTypes.File;
     hashingAlgorithm: string;
     onProcess: (processing: boolean) => void;
 };
 
 type State = {
-    hashResult?: HashResult;
+    hashResult?: HashingTypes.Result;
     isError: boolean;
     progress: number;
 };
@@ -48,7 +46,6 @@ export default class HashingProcess extends React.Component<Props, State> {
             progress: 0,
         };
         this.cryptoService = CryptoService.Instance;
-        this.doComparison = this.doComparison.bind(this);
         this.updateProgress = this.updateProgress.bind(this);
     }
 
@@ -65,8 +62,13 @@ export default class HashingProcess extends React.Component<Props, State> {
             .then(res => {
                 this.setState({ hashResult: res });
                 this.props.onProcess(false);
+                EventService.emit(Events.SHOW_MESSAGE, 'Success!', { type: Toasts.SUCCESS, duration: 2500 });
             })
-            .catch(err => this.setState({ isError: true }));
+            .catch(err => {
+                this.setState({ isError: true });
+                this.props.onProcess(false);
+                EventService.emit(Events.SHOW_MESSAGE, 'An error occured!', { type: Toasts.ERROR });
+            });
     }
 
     /**
@@ -89,7 +91,13 @@ export default class HashingProcess extends React.Component<Props, State> {
             <div>
                 <div className={styles.progressBar}>
                     <LinearProgress
-                        color={this.state.isError ? 'secondary' : 'primary'}
+                        color={this.state.isError ? 'primary' : 'secondary'}
+                        style={
+                            this.state.isError ? {
+                                backgroundColor: 'var(--md-primary-red)',
+                                filter: 'contrast(50%) brightness(125%)',
+                            } : undefined
+                        }
                         variant="determinate"
                         value={this.state.progress}
                     />
@@ -124,10 +132,12 @@ export default class HashingProcess extends React.Component<Props, State> {
                         <InputLabel>Hash</InputLabel>
                         <Input
                             className={
-                                this.props.comparison && this.state.hashResult
-                                    ? this.doComparison()
-                                        ? styles.sameHashes
-                                        : styles.differentHashes
+                                this.state.hashResult
+                                    ? this.props.comparison
+                                        ? this.props.comparison === this.state.hashResult.hash
+                                            ? styles.sameHashes
+                                            : styles.differentHashes
+                                        : styles.noComparisonHash
                                     : ''
                             }
                             disabled={this.state.hashResult ? false : true}
@@ -144,17 +154,6 @@ export default class HashingProcess extends React.Component<Props, State> {
                 </div >
             </div >
         );
-    }
-
-    /**
-     * Compares resulting hash to provided hash.
-     *
-     * @private
-     * @returns {boolean} true if equal, false otherwise
-     * @memberof HashingProcess
-     */
-    private doComparison(): boolean {
-        return this.props.comparison === this.state.hashResult.hash;
     }
 
     /**

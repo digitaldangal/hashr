@@ -1,4 +1,4 @@
-type States = {
+type ComponentStates = {
     [key: string]: any
 };
 
@@ -9,7 +9,7 @@ type States = {
  */
 class StateService {
 
-    private states: States;
+    private states: ComponentStates;
 
     /**
      * Creates an instance of StateService.

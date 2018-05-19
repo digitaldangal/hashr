@@ -4,25 +4,6 @@
   font-weight: bold !important;
 }
 
-/* .step-title {
-  pointer-events: none;
-} */
-
-.end-text>p {
-  margin-bottom: 20px;
-}
-
-.ondrag>div {
-  background-color: var(--md-primary-grey);
-  outline: 2px dashed var(--md-primary-blue);
-  transition: background-color 250ms var(--animation-cubic-bezier);
-  pointer-events: all;
-}
-
-.nodrag>div {
-  background-color: none;
-}
-
 .navigation-button {
   height: 60px;
   margin-bottom: -10px;
@@ -30,16 +11,40 @@
   text-align: right;
 }
 
-.step-content {
-  margin: 20px;
-}
-
 .step {
   position: relative;
 }
 
-.step div {
-  pointer-events: none;
+.step-content {
+  margin: 20px;
+}
+
+.dropzone {
+  position: absolute;
+  top: 35px;
+  left: 35px;
+  right: 10px;
+  bottom: 2px;
+  background-color: rgba(var(--md-secondary-blue-rgb), 0.5);
+  transition: all 250ms var(--animation-cubic-bezier);
+  outline: 2px dashed var(--md-primary-blue);
+  opacity: 0;
+  z-index: -2;
+}
+
+.dropzone.ondrag {
+  display: flex;
+  z-index: 2;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  opacity: 1;
+  pointer-events: all;
+}
+
+.dropzone-icon {
+  height: 60px !important;
+  width: 60px !important;
 }
 
 .no-pointer-events {
@@ -52,7 +57,7 @@
 
 .pulse {
   opacity: 1;
-  box-shadow: 0 0 0 rgba(var(--md-primary-white-rgba), 0.5);
+  box-shadow: 0 0 0 rgba(var(--md-primary-white-rgb), 0.5);
   animation: pulse 1.5s infinite;
   transition: opacity 750ms var(--animation-cubic-bezier), background-color 250ms var(--animation-cubic-bezier) 0ms, box-shadow 250ms var(--animation-cubic-bezier) 0ms !important;
 }
@@ -70,12 +75,12 @@
 
 @keyframes pulse {
   0% {
-    box-shadow: 0 0 0 0 rgba(var(--md-primary-white-rgba), 0.5);
+    box-shadow: 0 0 0 0 rgba(var(--md-primary-white-rgb), 0.5);
   }
   70% {
-    box-shadow: 0 0 0 10px rgba(var(--md-primary-white-rgba), 0);
+    box-shadow: 0 0 0 10px rgba(var(--md-primary-white-rgb), 0);
   }
   100% {
-    box-shadow: 0 0 0 0 rgba(var(--md-primary-white-rgba), 0);
+    box-shadow: 0 0 0 0 rgba(var(--md-primary-white-rgb), 0);
   }
 }

@@ -3,7 +3,9 @@ import '../themes/Variables.css';
 import * as React from 'react';
 
 import * as styles from './App.css';
+import Footer from './footer/Footer';
 import Main from './main/Main';
+import Messager from './widgets/messager/Messager';
 
 /**
  * Prevents default drag & drop events.
@@ -26,5 +28,7 @@ export default () => (
         onDrop={preventDragEvent}
     >
         <Main />
+        <Footer />
+        <Messager />
     </div>
 );

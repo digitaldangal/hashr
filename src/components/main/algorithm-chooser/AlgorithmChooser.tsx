@@ -1,7 +1,7 @@
 import { MenuItem, Select } from '@material-ui/core';
 import * as React from 'react';
 
-import { HashingAlgorithm } from '../../../models/HashingTypes';
+import { HashingTypes } from '../../../models';
 
 type Props = {
     chosenAlgorithm: string;
@@ -46,7 +46,7 @@ export default class AlgorithmChooser extends React.Component<Props, State> {
                     value={this.props.chosenAlgorithm}
                     onChange={this.handleChange}
                 >
-                    {Object.keys(HashingAlgorithm).map((alg, index) =>
+                    {Object.keys(HashingTypes.Algorithm).map((alg, index) =>
                         <MenuItem
                             key={index}
                             value={alg}

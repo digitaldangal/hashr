@@ -1,5 +1,5 @@
 /** Describes result of a hashing process. */
-export type HashResult = {
+export type Result = {
     algorithm: string;
     comparison: boolean;
     duration: string;
@@ -9,7 +9,7 @@ export type HashResult = {
 };
 
 /** All available hashing algorithms. */
-export const HashingAlgorithm = {
+export const Algorithm = {
     MD4: 'MD4',
     MD5: 'MD5',
     RipeMD: 'RIPEMD',

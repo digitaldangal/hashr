@@ -23,37 +23,32 @@
     "url": "git+https://gitlab.com/kobionic/hashr.git"
   },
   "scripts": {
-    "build:dev": "concurrently 'npm run build:web-dev -- --progress false' 'npm run build:electron-dev'",
-    "build:electron": "tsc --project tsconfig.electron.json",
-    "build:electron-dev": "tsc --project tsconfig.electron.json --watch",
-    "build:prod": "concurrently 'npm run build:web-prod' 'npm run build:electron'",
-    "build:web": "webpack --mode development --progress",
-    "build:web-dev": "webpack --mode development --watch",
-    "build:web-prod": "webpack --mode production",
-    "start": "electron .",
-    "start:dev": "ELECTRON_START_URL=http://localhost:3000 electron .",
-    "start:web": "webpack-dev-server --mode development --hot --inline"
+    "build": "concurrently 'webpack --mode production' 'tsc -p tsconfig.electron.json'",
+    "build:dev": "concurrently 'webpack --mode development --watch' 'tsc -p tsconfig.electron.json --watch'",
+    "start": "electron ."
   },
   "dependencies": {
-    "@material-ui/core": "1.0.0-rc.1",
-    "@material-ui/icons": "1.0.0-rc.0",
+    "@material-ui/core": "1.0.0",
+    "@material-ui/icons": "1.0.0",
     "bytes": "3.0.0",
     "moment": "2.22.1",
     "ms": "2.1.1",
     "react": "16.3.2",
-    "react-dom": "16.3.2"
+    "react-dom": "16.3.2",
+    "react-toastify": "4.0.1"
   },
   "devDependencies": {
     "@types/bytes": "3.0.0",
     "@types/react": "16.3.14",
     "@types/react-dom": "16.0.5",
+    "@types/react-toastify": "4.0.0",
+    "ajv": "6.5.0",
     "app-root-path": "2.0.1",
     "clean-webpack-plugin": "0.1.19",
     "concurrently": "3.5.1",
     "copy-webpack-plugin": "4.5.1",
     "css-loader": "0.28.11",
-    "electron": "2.0.0",
-    "electron-reload": "1.2.2",
+    "electron": "2.0.1",
     "file-loader": "1.1.11",
     "html-loader": "0.5.5",
     "html-webpack-plugin": "3.2.0",
@@ -68,9 +63,7 @@
     "typings-for-css-modules-loader": "1.7.0",
     "url-loader": "1.0.1",
     "webpack": "4.8.3",
-    "webpack-cli": "2.1.3",
-    "webpack-dev-server": "3.1.4",
-    "webpack-merge": "4.1.2"
+    "webpack-cli": "2.1.3"
   },
   "publishConfig": {
     "access": "public"

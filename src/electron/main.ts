@@ -1,32 +1,49 @@
-import { app, BrowserWindow } from 'electron';
-import * as reload from 'electron-reload';
+import { app, BrowserWindow, screen } from 'electron';
 import * as path from 'path';
 import * as url from 'url';
 
-if (process.env.NODE_ENV !== 'production') reload(__dirname, { electron: path.join(__dirname, '..', 'node_modules') });
-
 let mainWindow: Electron.BrowserWindow;
+const WINDOW_HEIGHT = 650;
+const WINDOW_WIDTH = 700;
 
 function createWindow() {
+    const bounds = screen.getPrimaryDisplay().bounds;
+    const x = Math.ceil(bounds.x + ((bounds.width - WINDOW_WIDTH) / 2));
+    const y = Math.ceil(bounds.y + ((bounds.height - WINDOW_HEIGHT) / 2));
+
     mainWindow = new BrowserWindow({
+        autoHideMenuBar: true,
         frame: true,
-        autoHideMenuBar: false,
-        height: 650,
-        width: 700,
-        resizable: true,
+        height: WINDOW_HEIGHT,
         icon: path.join(__dirname, 'icon.png'),
+        maximizable: false,
+        resizable: false,
+        width: WINDOW_WIDTH,
+        x: x,
+        y: y,
     });
 
-    mainWindow.loadURL(process.env.ELECTRON_START_URL || url.format({
+    let isMainWindow = true;
+    mainWindow.webContents.on('devtools-opened', () => {
+        if (isMainWindow) {
+            mainWindow.webContents.closeDevTools();
+            mainWindow.webContents.openDevTools({
+                mode: 'detach'
+            });
+            isMainWindow = false;
+        } else {
+            isMainWindow = true;
+        }
+    });
+
+    mainWindow.loadURL(url.format({
         pathname: path.join(__dirname, 'index.html'),
         protocol: 'file:',
         slashes: true,
     }));
 
-    if (process.env.NODE_ENV === 'development') mainWindow.webContents.openDevTools();
-
     mainWindow.on('closed', () => {
-        mainWindow = null;
+        mainWindow = undefined;
     });
 }
 
@@ -39,7 +56,7 @@ app.on('window-all-closed', () => {
 });
 
 app.on('activate', () => {
-    if (mainWindow === null) {
+    if (mainWindow === undefined) {
         createWindow();
     }
 });

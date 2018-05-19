@@ -1,0 +1,70 @@
+.footer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.footer span {
+  display: flex;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+}
+
+.app-text {
+  color: var(--md-primary-white);
+  font-family: RussianQuality;
+  font-size: 1.4em;
+  font-weight: bold;
+  margin-right: 10px;
+  padding-top: 4px;
+}
+
+.app-text-start {
+  color: var(--md-primary-teal);
+}
+
+.app-text-end {
+  color: var(--md-secondary-blue);
+}
+
+.app-version {
+  position: absolute;
+  right: 0;
+}
+
+.link {
+  all: unset;
+  text-decoration: none;
+}
+
+.highlight:hover {
+  transition: all 250ms var(--animation-cubic-bezier);
+  filter: brightness(1.5);
+}
+
+.middle-text {
+  font-size: 0.8em;
+  font-weight: bold;
+  color: var(--md-secondary-white);
+  margin-right: 10px;
+  border-bottom: 1px dotted var(--md-secondary-white);
+}
+
+.kobionic-logo {
+  width: 20px;
+  margin: 5px;
+}
+
+.kobionic-logo:not(:hover) {
+  transition: transform 1s ease;
+  transform: rotate(360deg);
+}
+
+.kobionic-text {
+  color: var(--md-primary-white);
+  font-family: Maken;
+  font-size: 1.1em;
+  font-weight: bold;
+}

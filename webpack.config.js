@@ -1,39 +1,83 @@
+const rootPath = require('app-root-path').path;
+const CleanPlugin = require('clean-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
+const fs = require('fs');
 const HtmlPlugin = require('html-webpack-plugin');
 const InterpolateHtmlPlugin = require('interpolate-html-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const webpack = require('webpack');
-const merge = require('webpack-merge')
-const fs = require('fs');
 
-const baseConfig = require('./webpack.config.base');
+const paths = {
+    assets: `${rootPath}/src/assets`,
+    dist: `${rootPath}/dist`,
+    dotenv: `${rootPath}/.env`,
+    electronMain: `${rootPath}/src/main.ts`,
+    electronRenderer: `${rootPath}/src/renderer.ts`,
+    favicon: `${rootPath}/public/favicon.ico`,
+    html: `${rootPath}/public/index.html`,
+    index: `${rootPath}/src/index.tsx`,
+    nodeModules: `${rootPath}/node_modules`,
+    packageJson: `${rootPath}/package.json`,
+    public: `${rootPath}/public`,
+    src: `${rootPath}/src`,
+    tsConfigJson: `${rootPath}/tsconfig.json`,
+    tsLintJson: `${rootPath}/tslint.json`,
+};
 
 module.exports = (env, options) => {
     const configuration = {
+        devtool: options.mode === 'production' ? undefined : 'source-map',
         entry: [
-            baseConfig.paths.index
+            paths.index
         ],
-        devServer: {
-            contentBase: baseConfig.paths.dist,
-            compress: true,
-            historyApiFallback: true,
-            open: false,
-            port: 9999,
-        },
         target: 'electron-main',
         output: {
-            path: baseConfig.paths.dist,
-            filename: '[name].bundle.js',
+            path: paths.dist,
+            filename: '[name].ui.js',
+        },
+        resolve: {
+            modules: [
+                paths.nodeModules,
+            ],
+            extensions: [
+                '.js',
+                '.json',
+                '.jsx',
+                '.ts',
+                '.tsx',
+                '.web.js',
+                '.web.jsx',
+                '.web.ts',
+                '.web.tsx',
+            ],
+        },
+        performance: {
+            hints: false,
         },
         module: {
             rules: [
+                {
+                    test: /\.(ts|tsx)$/,
+                    include: paths.src,
+                    loader: 'ts-loader',
+                    options: {
+                        configFile: paths.tsConfigJson
+                    },
+                },
+                {
+                    test: /\.js$/,
+                    loader: 'source-map-loader',
+                    enforce: 'pre',
+                    include: paths.src,
+                },
                 {
                     test: /\.html$/,
                     loader: 'html-loader',
                 },
                 {
                     test: /\.css$/,
+                    exclude: /node_modules/,
                     use: [
                         MiniCssExtractPlugin.loader,
                         {
@@ -48,7 +92,20 @@ module.exports = (env, options) => {
                     ]
                 },
                 {
-                    test: /(bmp|gif|ico|jpe?g|pdf|png|svg)$/,
+                    test: /ReactToastify\.min\.css$/,
+                    use: [
+                        MiniCssExtractPlugin.loader,
+                        {
+                            loader: 'css-loader',
+                            options: {
+                                modules: true,
+                                localIdentName: '[local]',
+                            },
+                        }
+                    ]
+                },
+                {
+                    test: /(bmp|gif|ico|jpe?g|pdf|png|svg|woff2?)$/,
                     loader: 'url-loader',
                     options: {
                         limit: 10000,
@@ -59,16 +116,12 @@ module.exports = (env, options) => {
         },
         plugins: [
             new CopyPlugin([
-                { from: baseConfig.paths.assets }
-            ]),
-            new webpack.NamedModulesPlugin(),
-            new webpack.WatchIgnorePlugin([
-                /css\.d\.ts$/,
+                { from: `${paths.public}/*.png`, flatten: true }
             ]),
             new HtmlPlugin({
-                favicon: baseConfig.paths.favicon,
+                favicon: paths.favicon,
                 inject: true,
-                template: baseConfig.paths.html,
+                template: paths.html,
                 minify: options.mode === 'development'
                     ? undefined
                     : {
@@ -88,17 +141,30 @@ module.exports = (env, options) => {
                 PUBLIC_URL: '',
             }),
             new MiniCssExtractPlugin({
-                filename: '[name].bundle.css',
+                filename: '[name].ui.css',
                 chunkFilename: '[id].css',
-            })
+            }),
+            new webpack.BannerPlugin(
+                { banner: fs.readFileSync('COPYRIGHT', 'utf8').trim() }
+            ),
+            new webpack.DefinePlugin({
+                'process.env': {
+                    NODE_ENV: JSON.stringify((process.env.NODE_ENV || 'development')).toLowerCase(),
+                },
+            }),
+            new webpack.NamedModulesPlugin(),
+            new webpack.WatchIgnorePlugin([
+                /css\.d\.ts$/,
+            ]),
         ],
     };
 
     if (options.mode === 'production') {
         configuration.plugins.push(
+            new CleanPlugin([paths.dist], { verbose: false }),
             new OptimizeCSSAssetsPlugin(),
         );
     }
 
-    return merge(baseConfig.getConfig(env, options), configuration);
+    return configuration;
 }

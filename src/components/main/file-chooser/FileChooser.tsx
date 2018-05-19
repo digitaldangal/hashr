@@ -2,11 +2,11 @@ import { Input, InputLabel } from '@material-ui/core';
 import * as bytes from 'bytes';
 import * as React from 'react';
 
-import { File } from '../../../models/CommonTypes';
+import { CommonTypes } from '../../../models';
 import * as styles from './FileChooser.css';
 
 type Props = {
-    chosenFile: File;
+    chosenFile: CommonTypes.File;
     compareTo: (comparison: string) => void;
     initialValue: string;
 };
