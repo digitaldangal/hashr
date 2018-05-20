@@ -10,7 +10,7 @@ const webpack = require('webpack');
 
 const paths = {
     assets: `${rootPath}/src/assets`,
-    dist: `${rootPath}/dist`,
+    dist: `${rootPath}/build`,
     dotenv: `${rootPath}/.env`,
     electronMain: `${rootPath}/src/main.ts`,
     electronRenderer: `${rootPath}/src/renderer.ts`,
@@ -120,7 +120,8 @@ module.exports = (env, options) => {
         },
         plugins: [
             new CopyPlugin([
-                { from: `${paths.public}/*.png`, flatten: true }
+                { from: `${paths.public}/*.+(icns|ico|png)`, flatten: true },
+                { from: `${paths.public}/icons`, to: `${paths.dist}/icons` },
             ]),
             new HtmlPlugin({
                 favicon: paths.favicon,
