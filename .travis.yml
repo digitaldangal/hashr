@@ -1,11 +1,24 @@
+sudo: 'required'
+
 language: 'node_js'
 node_js:
   - 'lts/*'
 
+services:
+  - 'docker'
+
 cache:
   directories:
     - 'node_modules'
+    - '${HOME}/.cache/electron'
+    - '${HOME}/.cache/electron-builder'
+
+before_cache:
+  - 'rm -rf ${HOME}/.cache/electron-builder/wine'
 
 install:
   - 'npm install'
   - 'npm run build'
+
+script:
+  - './docker-package.sh'
