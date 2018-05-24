@@ -19,6 +19,7 @@ function createWindow() {
         maximizable: false,
         resizable: false,
         transparent: false,
+        useContentSize: true,
         width: WINDOW_WIDTH,
         x: x,
         y: y,

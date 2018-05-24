@@ -43,6 +43,7 @@
     "no-any": false,
     "no-arg": true,
     "no-bitwise": true,
+    "no-consecutive-blank-lines": true,
     "no-console": [
       false,
       "log",
@@ -53,7 +54,6 @@
       "timeEnd",
       "trace"
     ],
-    "no-consecutive-blank-lines": true,
     "no-construct": true,
     "no-debugger": true,
     "no-duplicate-variable": true,
