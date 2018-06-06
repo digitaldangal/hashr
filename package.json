@@ -1,6 +1,6 @@
 {
   "name": "hashr",
-  "version": "1.0.0-SNAPSHOT",
+  "version": "1.1.0-SNAPSHOT",
   "private": true,
   "description": "An easy to use file hashing utility working with multiple algorithms. Powered by React & Material UI, built as a cross-plaform desktop application using Electron.",
   "keywords": [
