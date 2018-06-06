@@ -12,17 +12,17 @@ After starting the application, drag & drop your target file to window's central
 
 The ```Compare to``` field is optional. On below screenshot it corresponds to a digest given by the file provider used to check file integrity.
 
-![Drag & Drop](docs/screenshot_filled.png)
+<p align="center"><img src="docs/screenshot_filled.png" alt=""></p>
 
 Then, click on the **arrow down button** to go to next screen that allows hashing algorithm selection.
 
-![Algorithm Selection](docs/screenshot_algorithm.png)
+<p align="center"><img src="docs/screenshot_algorithm.png" alt=""></p>
 
 Repeat previous click to go to the process screen. On success, generated digest will appear in the ```Hash``` field.
 
 A comparison will be done only if the ```Compare to``` field was filled in during first step.
 
-![Process](docs/screenshot_final.png)
+<p align="center"><img src="docs/screenshot_final.png" alt=""></p>
 
 Finally, clicking on button will then go back to first step.
 
