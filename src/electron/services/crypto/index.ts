@@ -103,7 +103,6 @@ export default class CryptoService {
                 reject(err);
             }
         });
-
     }
 
 }

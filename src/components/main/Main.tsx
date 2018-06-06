@@ -4,6 +4,7 @@ import GetAppIcon from '@material-ui/icons/GetApp';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import * as React from 'react';
 
+import { FileService } from '../../electron/services';
 import { CommonTypes, HashingTypes } from '../../models';
 import AlgorithmChooser from './algorithm-chooser/AlgorithmChooser';
 import FileChooser from './file-chooser/FileChooser';
@@ -197,12 +198,12 @@ export default class Main extends React.Component<Props, State> {
             type: dropped.type,
         };
 
-        if (file.type !== '') {
-            this.setState({
-                canContinue: true,
-                chosenFile: file,
-            });
-        }
+        FileService
+            .isFile(file.path)
+            .then(isFile => {
+                if (isFile) this.setState({ canContinue: true, chosenFile: file });
+            })
+            .catch();
     }
 
     /**
