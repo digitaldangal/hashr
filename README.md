@@ -24,7 +24,7 @@ A comparison will be done only if the ```Compare to``` field was filled in durin
 
 <p align="center"><img src="docs/screenshot_final.png" alt=""></p>
 
-Finally, clicking on button will then go back to first step.
+Finally, clicking on button will go back to first step.
 
 ## Authors
 
