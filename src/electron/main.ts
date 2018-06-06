@@ -30,7 +30,7 @@ function createWindow() {
         if (isMainWindow) {
             mainWindow.webContents.closeDevTools();
             mainWindow.webContents.openDevTools({
-                mode: 'detach'
+                mode: 'detach',
             });
             isMainWindow = false;
         } else {

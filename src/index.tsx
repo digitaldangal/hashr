@@ -11,5 +11,5 @@ ReactDOM.render(
     <MuiThemeProvider theme={Theme}>
         <App />
     </MuiThemeProvider>,
-    document.getElementById('root') as HTMLElement
+    document.getElementById('root') as HTMLElement,
 );
