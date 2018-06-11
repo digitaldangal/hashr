@@ -1,5 +1,4 @@
 {
-  "buildCommand": "npm run package",
   "src": {
     "commitMessage": "Release v%s",
     "tagAnnotation": "%s",
@@ -9,12 +8,12 @@
     "release": true,
     "releaseName": "%s",
     "assets": [
-      "HashR Setup *.exe",
-      "hashr_*_amd64.deb",
-      "hashr_*_amd64.snap",
-      "hashr-*-x86_64.AppImage",
-      "hashr-*.tar.gz",
-      "hashr-*.x86_64.rpm"
+      "dist/HashR Setup *.exe",
+      "dist/hashr_*_amd64.deb",
+      "dist/hashr_*_amd64.snap",
+      "dist/hashr-*-x86_64.AppImage",
+      "dist/hashr-*.tar.gz",
+      "dist/hashr-*.x86_64.rpm"
     ]
   },
   "npm": {
