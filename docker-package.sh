@@ -1,7 +1,8 @@
-#!/bin/sh
-docker run --rm --security-opt apparmor=unconfined \
-    -v ${PWD}:/project \
-    -v ~/.cache/electron:/root/.cache/electron \
-    -v ~/.cache/electron-builder:/root/.cache/electron-builder \
+#!/bin/bash
+docker run \
+    --rm \
+    --volume ${PWD}:/project \
+    --volume ~/.cache/electron:/root/.cache/electron \
+    --volume ~/.cache/electron-builder:/root/.cache/electron-builder \
     electronuserland/builder:wine \
-    /bin/bash -c "npm run package"
+    /bin/bash -c "npm run package && chown -R ${UID}:${UID} build/ dist/"

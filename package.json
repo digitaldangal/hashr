@@ -38,7 +38,7 @@
     "build:dev": "npm-run-all --parallel 'build:web -- --mode development --watch' 'build:electron -- --watch'",
     "build:electron": "tsc -p tsconfig.electron.json",
     "build:web": "webpack --mode production",
-    "clean": "rimraf dist",
+    "clean": "rimraf build dist",
     "lint": "tslint --project . --format stylish",
     "package": "npm-run-all clean build build:desktop",
     "prepare": "npm run build",
