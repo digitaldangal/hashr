@@ -1,5 +1,4 @@
 {
-  "buildCommand": "npm run package",
   "src": {
     "commitMessage": "Release v%s",
     "tagAnnotation": "%s",
