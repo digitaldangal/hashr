@@ -1,0 +1,28 @@
+{
+  "buildCommand": "npm run package",
+  "src": {
+    "commitMessage": "Release v%s",
+    "tagAnnotation": "%s",
+    "tagName": "%s"
+  },
+  "github": {
+    "release": true,
+    "releaseName": "%s",
+    "assets": [
+      "HashR Setup %s.exe",
+      "hashr_%s_amd64.deb",
+      "hashr_%s_amd64.snap",
+      "hashr-%s-x86_64.AppImage",
+      "hashr-%s.tar.gz",
+      "hashr-%s.x86_64.rpm"
+    ]
+  },
+  "npm": {
+    "publish": false
+  },
+  "prompt": {
+    "src": {
+      "publish": false
+    }
+  }
+}
